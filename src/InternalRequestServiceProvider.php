@@ -14,7 +14,7 @@ class InternalRequestServiceProvider extends ServiceProvider
     {
         // bind singletons
         $this->app->singleton('InternalRequest', function () {
-            return new InternalRequestService();
+            return new InternalRequestService($this->app);
         });
     }
 
