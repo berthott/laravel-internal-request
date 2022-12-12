@@ -2,6 +2,7 @@
 
 namespace berthott\InternalRequest\Services;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class InternalRequestService
      *
      * @var $app
      */
-    protected $app;
+    protected Application $app;
 
     /**
      * Constructor
@@ -25,33 +26,33 @@ class InternalRequestService
         $this->app = $app;
     }
 
-    public function request(string $action, string $route, array $data = [])
+    public function request(string $action, string $route, array $data = [], Authenticatable $user = null)
     {
         $request = Request::create($route, $action, $data, [], [], [
             'HTTP_ACCEPT' => 'application/json',
             'HTTP_HOST' => 'internal'
         ]);
         $request->headers->add(request()->headers->all());
-        return $this->app->handle($request);
+        $request->setUserResolver(fn () => $user);
     }
 
-    public function get(string $route, array $data = [])
+    public function get(string $route, array $data = [], Authenticatable $user = null)
     {
-        return $this->request('GET', $route, $data);
+        return $this->request('GET', $route, $data, $user);
     }
 
-    public function post(string $route, array $data = [])
+    public function post(string $route, array $data = [], Authenticatable $user = null)
     {
-        return $this->request('POST', $route, $data);
+        return $this->request('POST', $route, $data, $user);
     }
 
-    public function put(string $route, array $data = [])
+    public function put(string $route, array $data = [], Authenticatable $user = null)
     {
-        return $this->request('PUT', $route, $data);
+        return $this->request('PUT', $route, $data, $user);
     }
 
-    public function delete(string $route, array $data = [])
+    public function delete(string $route, array $data = [], Authenticatable $user = null)
     {
-        return $this->request('DELETE', $route, $data);
+        return $this->request('DELETE', $route, $data, $user);
     }
 }
