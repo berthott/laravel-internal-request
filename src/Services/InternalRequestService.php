@@ -10,10 +10,10 @@ class InternalRequestService
 {
     /**
      * The app instance
-     *
-     * @var $app
      */
     protected Application $app;
+
+    protected bool $skipMiddleware = false;
 
     /**
      * Constructor
@@ -34,6 +34,26 @@ class InternalRequestService
         ]);
         $request->headers->add(request()->headers->all());
         $request->setUserResolver(fn () => $user);
+        $response = $this->app->handle($request);
+        $this->skipMiddleware = false;
+        return $response;
+    }
+
+    /**
+     * Whether the middleware should be skipped for this request.
+     */
+    public function isMiddlewareDisabled(): bool
+    {
+        return $this->skipMiddleware;
+    }
+
+    /**
+     * Whether the middleware should be skipped for this request.
+     */
+    public function skipMiddleware($skip = true): self
+    {
+        $this->skipMiddleware = $skip;
+        return $this;
     }
 
     public function get(string $route, array $data = [], Authenticatable $user = null)

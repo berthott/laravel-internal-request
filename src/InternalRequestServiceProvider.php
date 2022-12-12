@@ -2,6 +2,7 @@
 
 namespace berthott\InternalRequest;
 
+use berthott\InternalRequest\Facades\InternalRequest;
 use berthott\InternalRequest\Services\InternalRequestService;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,6 +16,11 @@ class InternalRequestServiceProvider extends ServiceProvider
         // bind singletons
         $this->app->singleton('InternalRequest', function () {
             return new InternalRequestService($this->app);
+        });
+
+        // disable middleware for internal request
+        $this->app->bind('middleware.disable', function () {
+            return InternalRequest::isMiddlewareDisabled();
         });
     }
 
