@@ -5,7 +5,11 @@ namespace berthott\InternalRequest\Services;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
+/**
+ * Wrapper around Illuminate\Http\Request.
+ */
 class InternalRequestService
 {
     protected bool $skipMiddleware = false;
@@ -20,7 +24,12 @@ class InternalRequestService
     {
     }
 
-    public function request(string $action, string $route, array $data = [], Authenticatable $user = null)
+    /**
+     * Run an internal request and return it's result.
+     * 
+     * @api
+     */
+    public function request(string $action, string $route, array $data = [], Authenticatable $user = null): Response
     {
         $request = Request::create($route, $action, $data, [], [], [
             'HTTP_ACCEPT' => 'application/json',
@@ -35,6 +44,9 @@ class InternalRequestService
 
     /**
      * Whether the middleware should be skipped for this request.
+     * 
+     * @see \berthott\InternalRequest\InternalRequestServiceProvider::register()
+     * @link https://github.com/laravel/framework/blob/aef89589ea70e0081c139b06550220cc75f20ea6/src/Illuminate/Routing/Router.php#L791 middleware.disable
      */
     public function isMiddlewareDisabled(): bool
     {
@@ -42,7 +54,11 @@ class InternalRequestService
     }
 
     /**
-     * Whether the middleware should be skipped for this request.
+     * Skip the middleware for this request.
+     * 
+     * @see \berthott\InternalRequest\InternalRequestServiceProvider::register()
+     * @link https://github.com/laravel/framework/blob/aef89589ea70e0081c139b06550220cc75f20ea6/src/Illuminate/Routing/Router.php#L791 middleware.disable
+     * @api
      */
     public function skipMiddleware($skip = true): self
     {
@@ -50,22 +66,42 @@ class InternalRequestService
         return $this;
     }
 
-    public function get(string $route, array $data = [], Authenticatable $user = null)
+    /**
+     * Convenience wrapper for get requests.
+     * 
+     * @api
+     */
+    public function get(string $route, array $data = [], Authenticatable $user = null): Response
     {
         return $this->request('GET', $route, $data, $user);
     }
 
-    public function post(string $route, array $data = [], Authenticatable $user = null)
+    /**
+     * Convenience wrapper for get requests.
+     * 
+     * @api
+     */
+    public function post(string $route, array $data = [], Authenticatable $user = null): Response
     {
         return $this->request('POST', $route, $data, $user);
     }
 
-    public function put(string $route, array $data = [], Authenticatable $user = null)
+    /**
+     * Convenience wrapper for get requests.
+     * 
+     * @api
+     */
+    public function put(string $route, array $data = [], Authenticatable $user = null): Response
     {
         return $this->request('PUT', $route, $data, $user);
     }
 
-    public function delete(string $route, array $data = [], Authenticatable $user = null)
+    /**
+     * Convenience wrapper for get requests.
+     * 
+     * @api
+     */
+    public function delete(string $route, array $data = [], Authenticatable $user = null): Response
     {
         return $this->request('DELETE', $route, $data, $user);
     }
