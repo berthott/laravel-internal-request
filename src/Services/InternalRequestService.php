@@ -8,11 +8,6 @@ use Illuminate\Http\Request;
 
 class InternalRequestService
 {
-    /**
-     * The app instance
-     */
-    protected Application $app;
-
     protected bool $skipMiddleware = false;
 
     /**
@@ -21,9 +16,8 @@ class InternalRequestService
      * @param Application $app        The app instance.
      * @return void
      */
-    public function __construct(Application $app)
+    public function __construct(protected Application $app)
     {
-        $this->app = $app;
     }
 
     public function request(string $action, string $route, array $data = [], Authenticatable $user = null)
