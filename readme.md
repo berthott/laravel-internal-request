@@ -4,7 +4,7 @@ Laravel Helper for running internal requests.
 
 ## Installation
 
-```
+```sh
 $ composer require berthott/laravel-internal-request
 ```
 
