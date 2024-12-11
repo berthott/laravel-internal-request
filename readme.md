@@ -1,3 +1,5 @@
+![test workflow](https://github.com/berthott/laravel-internal-request/actions/workflows/test.yml/badge.svg)
+
 # Laravel-Internal-Request
 
 Laravel Helper for running internal requests.
